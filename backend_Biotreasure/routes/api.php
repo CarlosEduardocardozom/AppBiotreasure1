@@ -10,9 +10,15 @@ Route::get('teste', function (Request $request) {
     return "Teste";
 });
 
-Route::get('/criarA', [AnimalController::class,'criar']);
-Route::get('/editarA', [AnimalController::class,'editar']);
-Route::get('/animais', [AnimalController::class,'listar']);
-Route::get('/criarC', [CoordenadasController::class,'criar']);
-Route::get('/editarC', [CoordenadasController::class,'editar']);
-Route::get('/coordenadas', [CoordenadasController::class,'listar']);
+Route::get('/animais', [AnimalController::class, 'listar']); // Listar todos os animais
+Route::get('/animal/{id}',[AnimalController::class, 'show']);
+Route::post('/new-animal', [AnimalController::class, 'criar']); // Criar um novo animal
+Route::put('/edit-animal/{id}', [AnimalController::class, 'editar']); // Editar um animal existente
+Route::delete('/delete-animal/{id}', [AnimalController::class, 'deletar']); // Deletar um animal
+
+// Rotas para o controlador de Coordenadas
+Route::get('/coordenadas', [CoordenadasController::class, 'listar']); // Listar todas as coordenadas
+Route::get('/coordenada/{id}', [CoordenadasController::class, 'show']);
+Route::post('/new-coordenada', [CoordenadasController::class, 'criar']); // Criar nova coordenada
+Route::put('/edit-coordenada/{id}', [CoordenadasController::class, 'editar']); // Editar coordenada existente
+Route::delete('/delete-coordenada/{id}', [CoordenadasController::class, 'deletar']); // Deletar uma coordenada

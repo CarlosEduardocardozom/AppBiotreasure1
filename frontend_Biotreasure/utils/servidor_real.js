@@ -3,7 +3,7 @@
  */
 async function lerAnimais() {
   try {
-    const response = await fetch('http://127.0.0.1:8000/animais')
+    const response = await fetch('http://127.0.0.1:8000/api/animais')
     return await response.json()
   } catch (error) {
     console.log(error)
@@ -13,7 +13,7 @@ async function lerAnimais() {
 
 async function adicionarAnimal(animal) {
   try {
-    const response = await fetch('http://127.0.0.1:8000/criarA', {
+    const response = await fetch('http://127.0.0.1:8000/api/criarA', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -36,7 +36,7 @@ async function adicionarAnimal(animal) {
 
 async function editarAnimal(animal) {
   try {
-    const response = await fetch('http://127.0.0.1:8000/editarA/' + animal.id, {
+    const response = await fetch('http://127.0.0.1:8000/api/editarA/' + animal.id, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',

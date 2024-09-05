@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Animal extends Model
 {
     use HasFactory;
-    protected $fillable =['nome','cientifico'];
+    protected $table = 'animais';
+    protected $fillable =['nome','cientifico','coordenadas_id'];
 
     public function coordenadas(){
-        return $this->belongsTo(Coordenadas::class); 
+        return $this->belongsTo(Coordenadas::class,'coordenadas_id'); 
     }
 }

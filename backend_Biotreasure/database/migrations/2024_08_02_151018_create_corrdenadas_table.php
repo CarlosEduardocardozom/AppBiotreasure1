@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('coordenadas', function (Blueprint $table) {
             $table->id();
-            $table->float('latitude');
-            $table->float('longitude');
-            $table->foreignId('animal_id');
+            $table->string('latitude');
+            $table->string('longitude');
             $table->timestamps();
         });
     }

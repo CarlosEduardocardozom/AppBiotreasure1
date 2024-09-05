@@ -11,7 +11,7 @@ class StoreCoordenadasRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,9 +22,8 @@ class StoreCoordenadasRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'latitude' => 'required|float|max:255|unique:coordenadas',
-            'longitude'=>'required|float|mass:255|unique:coordenadas',
-            'animal_id'=>'required'
+            'latitude' => 'required|string|max:255|unique:coordenadas',
+            'longitude'=>'required|string|max:255|unique:coordenadas',
         ];
     }
 }

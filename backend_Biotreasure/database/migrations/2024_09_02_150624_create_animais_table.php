@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome');
             $table->string('cientifico');
+            $table->foreignId('coordenadas_id')->constrained('coordenadas');
             $table->timestamps();
         });
     }
