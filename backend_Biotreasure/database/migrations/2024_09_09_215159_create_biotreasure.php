@@ -11,17 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('animais', function (Blueprint $table) {
+        Schema::create('tb_animais', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
             $table->string('cientifico');
             $table->timestamps();
         });
-        Schema::create('coordenadas', function (Blueprint $table) {
+        Schema::create('tb_coordenadas', function (Blueprint $table) {
             $table->id();
             $table->string('latitude');
             $table->string('longitude');
-            $table->foreignId('animal_id')->constrained('animais');
+            $table->foreignId('animal_id')->constrained('tb_animais');
             $table->timestamps();
         });
     }
@@ -31,7 +31,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('animais');
-        Schema::dropIfExists('coordenadas');
+        Schema::dropIfExists('tb_biotreasure');
+        Schema::dropIfExists('tb_coordenadas');
     }
 };

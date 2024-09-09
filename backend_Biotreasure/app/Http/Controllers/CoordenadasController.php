@@ -1,21 +1,25 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Coordenadas;
-use Illuminate\Http\Request;
+
 use App\Http\Requests\StoreCoordenadasRequest;
+use Illuminate\Http\Request;
+use App\Models\Coordenadas;
+use App\Models\Animal;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CoordenadasController extends Controller
 {
     public function listar() //Função para visualizar
     {
-        $coordenadas = Coordenadas::with('animal')->get();
+        $coordenadas = Coordenadas::all();
         return response()->json($coordenadas);
     }
 
     public function show($id)  //Função para criar os animais
     {
         try {
+            $animal = Animal::all();
             $coordenada = Coordenadas::find($id);
             return response()->json([
                 'success' => true,
@@ -66,23 +70,20 @@ class CoordenadasController extends Controller
 
     }
 
-    public function deletar(StoreCoordenadasRequest $request, $id) //Função para atualizar
+    public function deletar($id) //Função para atualizar
     {
-        try {
-            $coordenada= Coordenadas::findOrfail($id);
-
-            $coordenada->delete($request->all());
+        try{
+            $coordenada = Coordenadas::destroy($id);
             return response()->json([
-                'success' => true,
-                'data' => $coordenada,
-            ]);
-        } catch (ModelNotFoundException) {
+                'sucess' => true,
+                'coordenada' => $coordenada
+            ], status: 201);
+        }catch (\Exception $e){
             return response()->json([
-                'success' => false,
-                'message' => "Coordenada não encontrada",
-            ], 404);
+                'sucess' => false,
+                'message' => $e->getMessage()
+            ], status: 404);
         }
-
     }
 
 

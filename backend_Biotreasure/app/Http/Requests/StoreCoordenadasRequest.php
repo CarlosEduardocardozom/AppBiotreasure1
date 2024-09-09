@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreCoordenadasRequest extends FormRequest
 {
@@ -22,9 +24,17 @@ class StoreCoordenadasRequest extends FormRequest
     public function rules():array
     {
         return [
-            'latitude' => 'required|string|max:255|unique:coordenadas',
-            'longitude'=>'required|string|max:255|unique:coordenadas',
-            'animal_id'=>'required|integer'
+            'latitude' => 'required|string',
+            'longitude'=>'required|string',
+            'animal_id'=>'required|exists:tb_animais,id',
         ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(
+            [
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422));
     }
 }

@@ -50,23 +50,20 @@ class AnimalController extends Controller
 
     
     
-    public function deletar(StoreAnimalRequest $request, $id) //Função para atualizar
+    public function deletar($id) //Função para atualizar
     {
-        try {
-            $animal= Animal::findOrfail($id);
-
-            $animal->delete($request->all());
+        try{
+            $animal = Animal::destroy($id);
             return response()->json([
-                'success' => true,
-                'data' => $animal,
-            ]);
-        } catch (ModelNotFoundException) {
+                'sucess' => true,
+                'animal' => $animal
+            ], status: 201);
+        }catch (\Exception $e){
             return response()->json([
-                'success' => false,
-                'message' => "animal não encontrado",
-            ], 404);
+                'sucess' => false,
+                'message' => $e->getMessage()
+            ], status: 404);
         }
-
     }
 
 

@@ -25,12 +25,11 @@ class StoreAnimalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nome' => 'required|string|max:255|unique:animal',
-            'cientifico'=>'required|string|max:255|unique:animal',
+            'nome' => 'required|string',
+            'cientifico'=>'required|string',
             
         ];
     }
-
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json(
