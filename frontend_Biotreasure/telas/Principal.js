@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet } from 'react-native'
 import { DataTable, FAB, Appbar } from 'react-native-paper'
 import { useState, useEffect } from 'react'
 
-import servidor from '../utils/servidor'
+import servidor from '../utils/servidor_real'
 
 export default function Principal({ navigation }) {
   const [animais, setAnimais] = useState([])

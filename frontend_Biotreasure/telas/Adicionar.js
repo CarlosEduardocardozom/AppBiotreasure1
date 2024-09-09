@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { Button, TextInput, Appbar } from 'react-native-paper';
 
-import servidor from '../utils/servidor'
+import servidor from '../utils/servidor_real'
 
 export default function Adicionar({ navigation }) {
   const [nome, setNome] = useState('')
