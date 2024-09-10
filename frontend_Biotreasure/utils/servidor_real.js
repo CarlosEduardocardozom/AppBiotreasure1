@@ -138,5 +138,5 @@ module.exports = {
   lerCoordenadas,
   adicionarCoordenadas,
   editarCoordenadas,
-  removerCoordenadas
+  removerCoordenadas,
 };
