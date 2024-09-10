@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { editarAnimal } from '../../utils/servidor_real'; // Ajuste o caminho
 
 const EditAnimal = ({ route, navigation }) => {
@@ -7,6 +5,19 @@ const EditAnimal = ({ route, navigation }) => {
   const [nome, setNome] = useState(animal.nome);
   const [cientifico, setCientifico] = useState(animal.cientifico);
   const [coordenadas, setCoordenadas] = useState(animal.coordenadas);
+
+  // Adiciona um botão "Voltar" no canto superior esquerdo
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Button
+          onPress={() => navigation.goBack()} // Navega de volta para a tela anterior
+          title="Voltar"
+          color="#000"
+        />
+      ),
+    });
+  }, [navigation]);
 
   const handleEditAnimal = async () => {
     const updatedAnimal = { ...animal, nome, cientifico, coordenadas };

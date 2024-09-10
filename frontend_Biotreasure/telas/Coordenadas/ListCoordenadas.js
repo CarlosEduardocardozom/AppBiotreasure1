@@ -33,6 +33,7 @@ const ListCoordenadas = ({ navigation }) => {
           </View>
         )}
       />
+      <Button title="Adicionar Coordenada" onPress={() => navigation.navigate('AddCoordenadas')} />
     </View>
   );
 };

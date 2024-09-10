@@ -22,7 +22,6 @@ async function adicionarAnimal(animal) {
         body: JSON.stringify({
           nome: animal.nome,
           cientifico: animal.cientifico,
-          coordenadas: animal.coordenadas // Adiciona as coordenadas do animal
       })
     });
 
@@ -44,12 +43,8 @@ async function editarAnimal(animal) {
       body: JSON.stringify({
         nome: animal.nome,
         cientifico: animal.cientifico,
-        coordenadas: animal.coordenadas, // Adiciona as coordenadas ao editar o animal
-        latitude: animal.latitude,
-        longitude: animal.longitude
       })
     });
-
     return response.status === 201; // Retorna 'true' se o status for 201
   } catch (error) {
     console.log(error);
@@ -62,11 +57,20 @@ async function removerAnimal(animal) {
     const response = await fetch('http://127.0.0.1:8000/api/delete-animal/' + animal.id, {
       method: 'DELETE'
     });
-
     return response.status === 201; // Retorna 'true' se o status for 201
   } catch (error) {
     console.log(error);
     return response.status === 404; // Retorna 'false' se o status for 404
+  }
+}
+
+async function lerCoordenadas() {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/coordenadas');
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 }
 
@@ -85,7 +89,6 @@ async function adicionarCoordenadas(coordenada) {
           animal_id: coordenada.animal_id // Vincula coordenada ao animal
       })
     });
-
     return response.status === 201; // Retorna 'true' se o status for 201
   } catch (error) {
     console.log(error);
@@ -107,7 +110,6 @@ async function editarCoordenadas(coordenada) {
         animal_id: coordenada.animal_id // Mantém o vínculo do animal
       })
     });
-
     return response.status === 201; // Retorna 'true' se o status for 201
   } catch (error) {
     console.log(error);
@@ -133,6 +135,7 @@ module.exports = {
   adicionarAnimal,
   editarAnimal,
   removerAnimal,
+  lerCoordenadas,
   adicionarCoordenadas,
   editarCoordenadas,
   removerCoordenadas

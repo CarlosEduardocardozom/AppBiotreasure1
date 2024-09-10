@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { adicionarAnimal } from '../../utils/servidor_real'; // Ajuste o caminho
-
+import { Picker } from "@react-native-picker/picker";
 const AddAnimal = ({ navigation }) => {
   const [nome, setNome] = useState('');
   const [cientifico, setCientifico] = useState('');
   const [coordenadas, setCoordenadas] = useState('');
+
+  // Define o botão de navegação no canto superior esquerdo
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Button
+          onPress={() => navigation.goBack()} // Volta para a tela anterior
+          title="Voltar"
+          color="#000"
+        />
+      ),
+    });
+  }, [navigation]);
 
   const handleAddAnimal = async () => {
     const animal = { nome, cientifico, coordenadas };
