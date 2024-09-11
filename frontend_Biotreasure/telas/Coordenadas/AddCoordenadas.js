@@ -88,7 +88,7 @@ const AddCoordenadas = ({ navigation }) => {
             <Picker.Item key={animal.id} label={animal.nome} value={animal.id} />
         ))}
       </Picker>
-      <Button title="Adicionar Coordenadas" onPress={handleSubmit} />
+      <Button title="Adicionar Coordenadas" onPress={handleSubmit} color="green"/>
     </View>
   );
 };

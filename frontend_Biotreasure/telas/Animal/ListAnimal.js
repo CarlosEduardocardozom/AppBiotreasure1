@@ -59,7 +59,7 @@ const ListAnimal = ({ navigation }) => {
           </View>
         )}
       />
-      <Button title="Adicionar Animal" onPress={() => navigation.navigate('AddAnimal')} />
+      <Button title="Adicionar Animal" onPress={() => navigation.navigate('AddAnimal')} color="green" />
     </View>
   );
 };
