@@ -1,20 +1,19 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect, useEffect } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { adicionarCoordenadas, lerAnimais } from '../../utils/servidor_real'; // Ajuste o caminho e adicione a função para buscar os animais
-import { Picker } from "@react-native-picker/picker";
+import { adicionarCoordenadas, lerAnimais } from '../../utils/servidor_real'; // Ajuste o caminho
+import { Picker } from '@react-native-picker/picker'; 
 
-const AddCoordenadas = ({ navigation }) => {
+const AddCoordenada = ({ navigation }) => {
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
-  const [animalId, setAnimalId] = useState('');
-  const [animais, setAnimais] = useState([]); // Estado para armazenar os animais
+  const [animalId, setAnimalId] = useState(null);
+  const [animais, setAnimais] = useState([]);
 
-  // Define o botão de navegação no canto superior esquerdo
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <Button
-          onPress={() => navigation.goBack()} // Volta para a tela anterior
+          onPress={() => navigation.goBack()}
           title="Voltar"
           color="#000"
         />
@@ -22,82 +21,77 @@ const AddCoordenadas = ({ navigation }) => {
     });
   }, [navigation]);
 
-  // Carrega os animais para o Picker ao montar o componente
   useEffect(() => {
     const fetchAnimais = async () => {
-      try {
-        const data = await lerAnimais();
-        console.log('Animais obtidos:', data); // Adicione este log para verificar os dados
-        setAnimais(data); // Armazena os animais obtidos no estado
-      } catch (error) {
-        console.error('Erro ao buscar animais:', error); // Adicione este log para verificar erros
-      }
+      const listaAnimais = await lerAnimais();
+      setAnimais(listaAnimais);
     };
-    
+
     fetchAnimais();
   }, []);
 
-  const handleSubmit = async () => {
+  const handleAddCoordenada = async () => {
     if (!latitude || !longitude || !animalId) {
       Alert.alert('Por favor, preencha todos os campos.');
       return;
     }
 
-    const coordenada = { 
-      latitude: parseFloat(latitude),
-      longitude: parseFloat(longitude),
-      animal_id: animalId 
-    };
-
+    const coordenada = { latitude, longitude, animal_id: animalId };
     try {
-      const success = await adicionarCoordenadas(coordenada);
-      if (success) {
-        Alert.alert('Coordenadas adicionadas com sucesso!');
-        navigation.goBack(); // Volta para a tela anterior
+      const added = await adicionarCoordenadas(coordenada);
+      if (added) {
+        Alert.alert('Sucesso', 'Coordenada adicionada com sucesso!');
+        navigation.navigate('ListCoordenadas'); 
       } else {
-        Alert.alert('Erro ao adicionar coordenadas. Tente novamente.');
+        Alert.alert('Erro', 'Falha ao adicionar a coordenada.');
       }
     } catch (error) {
-      Alert.alert('Erro ao adicionar coordenadas. Tente novamente.');
-      console.error('Erro ao adicionar coordenadas:', error); // Adicione este log para verificar erros
+      console.error('Erro ao adicionar coordenada:', error);
+      Alert.alert('Erro', 'Ocorreu um erro ao adicionar a coordenada.');
     }
   };
 
   return (
-    <View>
-      <Text>Add Coordenadas</Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>Latitude:</Text>
       <TextInput
-        placeholder="Latitude"
+        style={styles.input}
         value={latitude}
         onChangeText={setLatitude}
-        keyboardType="numeric"
       />
+      <Text style={styles.label}>Longitude:</Text>
       <TextInput
-        placeholder="Longitude"
+        style={styles.input}
         value={longitude}
         onChangeText={setLongitude}
-        keyboardType="numeric"
       />
+      <Text style={styles.label}>Animal:</Text>
       <Picker
-          selectedValue={animalId}
-          onValueChange={(value) => setAnimalId(value)}
-          style={styles.item}
+        selectedValue={animalId}
+        onValueChange={(itemValue) => setAnimalId(itemValue)}
+        style={styles.picker}
       >
-        <Picker.Item label="Selecione um animal" value="" />
+        <Picker.Item label="Selecione um animal" value={null} />
         {animais.map((animal) => (
-            <Picker.Item key={animal.id} label={animal.nome} value={animal.id} />
+          <Picker.Item key={animal.id} label={animal.nome} value={animal.id} />
         ))}
       </Picker>
-      <Button title="Adicionar Coordenadas" onPress={handleSubmit} />
+      <Button title="Adicionar" onPress={handleAddCoordenada} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  item: {
-    height: 50,
-    width: 300,
+  container: { padding: 16 },
+  label: { fontSize: 16, marginBottom: 8 },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
   },
+  picker: { height: 50, marginBottom: 16 },
 });
 
-export default AddCoordenadas;
+export default AddCoordenada;

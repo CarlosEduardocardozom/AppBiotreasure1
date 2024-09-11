@@ -1,42 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
-import { editarCoordenadas } from '../../utils/servidor_real'; // Importe a função correta
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { editarCoordenadas, lerAnimais } from '../../utils/servidor_real'; 
+import { Picker } from '@react-native-picker/picker'; 
 
-const EditCoordenadas = ({ route, navigation }) => {
-  const { coordenada } = route.params;
-  const [latitude, setLatitude] = useState(coordenada.latitude.toString());
-  const [longitude, setLongitude] = useState(coordenada.longitude.toString());
+const EditCoordenada = ({ route, navigation }) => {
+  const { coordenadaId } = route.params;
+  const [latitude, setLatitude] = useState('');
+  const [longitude, setLongitude] = useState('');
+  const [animalId, setAnimalId] = useState(null);
+  const [animais, setAnimais] = useState([]);
 
-  const handleSubmit = async () => {
-    const updatedCoordenada = { id: coordenada.id, latitude: parseFloat(latitude), longitude: parseFloat(longitude) };
-    
-    const success = await editarCoordenadas(updatedCoordenada);
-    if (success) {
-      Alert.alert('Coordenadas atualizadas com sucesso!');
-      navigation.goBack(); // Volta para a tela anterior
-    } else {
-      Alert.alert('Erro ao atualizar coordenadas. Tente novamente.');
+  useEffect(() => {
+    const fetchCoordenada = async () => {
+      // Suponha que temos um método para obter uma coordenada específica
+      const coordenada = await lerCoordenadas(coordenadaId);
+      setLatitude(coordenada.latitude);
+      setLongitude(coordenada.longitude);
+      setAnimalId(coordenada.animal_id);
+    };
+
+    const fetchAnimais = async () => {
+      const listaAnimais = await lerAnimais();
+      setAnimais(listaAnimais);
+    };
+
+    fetchCoordenada();
+    fetchAnimais();
+  }, [coordenadaId]);
+
+  const handleEditCoordenada = async () => {
+    if (!latitude || !longitude || !animalId) {
+      Alert.alert('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    const coordenada = { id: coordenadaId, latitude, longitude, animal_id: animalId };
+    try {
+      const edited = await editarCoordenadas(coordenada);
+      if (edited) {
+        Alert.alert('Sucesso', 'Coordenada editada com sucesso!');
+        navigation.navigate('ListCoordenadas');
+      } else {
+        Alert.alert('Erro', 'Falha ao editar a coordenada.');
+      }
+    } catch (error) {
+      console.error('Erro ao editar coordenada:', error);
+      Alert.alert('Erro', 'Ocorreu um erro ao editar a coordenada.');
     }
   };
 
   return (
-    <View>
-      <Text>Edit Coordenadas</Text>
+    <View style={styles.container}>
+      <Text style={styles.label}>Latitude:</Text>
       <TextInput
-        placeholder="Latitude"
+        style={styles.input}
         value={latitude}
         onChangeText={setLatitude}
-        keyboardType="numeric"
       />
+      <Text style={styles.label}>Longitude:</Text>
       <TextInput
-        placeholder="Longitude"
+        style={styles.input}
         value={longitude}
         onChangeText={setLongitude}
-        keyboardType="numeric"
       />
-      <Button title="Salvar" onPress={handleSubmit} />
+      <Text style={styles.label}>Animal:</Text>
+      <Picker
+        selectedValue={animalId}
+        value={animalId}
+        onValueChange={(itemValue) => setAnimalId(itemValue)}
+        style={styles.picker}
+      >
+        {animais.map((animal) => (
+          <Picker.Item key={animal.id} label={animal.nome} value={animal.id} />
+        ))}
+      </Picker>
+      <Button title="Salvar" onPress={handleEditCoordenada} />
     </View>
   );
 };
 
-export default EditCoordenadas;
+const styles = StyleSheet.create({
+  container: { padding: 16 },
+  label: { fontSize: 16, marginBottom: 8 },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+  },
+  picker: { height: 50, marginBottom: 16 },
+});
+
+export default EditCoordenada;
