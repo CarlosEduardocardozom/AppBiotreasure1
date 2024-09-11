@@ -1,6 +1,7 @@
 import React, { useState, useLayoutEffect } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { adicionarAnimal } from '../../utils/servidor_real'; // Ajuste o caminho
+import { adicionarAnimal } from '../../utils/servidor_real'; 
+// Ajuste o caminho
 
 const AddAnimal = ({ navigation }) => {
   const [nome, setNome] = useState('');
@@ -30,8 +31,9 @@ const AddAnimal = ({ navigation }) => {
     try {
       const added = await adicionarAnimal(animal);
       if (added) {
-        Alert.alert('Sucesso', 'Animal adicionado com sucesso!');
-        navigation.navigate('ListAnimal'); // Navega para a rota ListAnimal
+        Alert.alert('Sucesso', 'Animal adicionado com sucesso!', [
+          { text: 'OK', onPress: () => navigation.navigate('Principal') } // Navega para a página principal após o alerta
+        ]);
       } else {
         Alert.alert('Erro', 'Falha ao adicionar o animal.');
       }
@@ -55,7 +57,7 @@ const AddAnimal = ({ navigation }) => {
         value={cientifico}
         onChangeText={setCientifico}
       />
-      <Button title="Adicionar" onPress={handleAddAnimal} />
+      <Button title="Adicionar" onPress={handleAddAnimal} color="green"/>
     </View>
   );
 };
